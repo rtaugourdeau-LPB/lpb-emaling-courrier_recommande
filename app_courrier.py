@@ -524,6 +524,26 @@ with st.sidebar:
     """)
     st.markdown("## ⚙️ Connexions")
     with st.expander("🏠 Merci Facteur", expanded=False):
+                st.markdown("""
+### Guide Merci Facteur API
+Pour connecter l’app à Merci Facteur, il te faut :
+- une **clé publique**
+- une **clé secrète**
+- un **User ID MF**
+
+**Liens utiles**
+- Doc API Merci Facteur : https://www.merci-facteur.com/api/1.2/doc.php
+- Liste des endpoints : https://www.merci-facteur.com/api/1.2/
+- Endpoint `getToken` : https://www.merci-facteur.com/api/1.2/?op=getToken
+- Endpoint `sendCourrier` : https://www.merci-facteur.com/api/1.2/?op=sendCourrier
+- Présentation API Merci Facteur Pro : https://www.merci-facteur.com/pro/api-envoi-courrier.php
+
+**Principe**
+1. Renseigner la clé publique et la clé secrète
+2. Cliquer sur **Connecter**
+3. Renseigner ensuite le **User ID MF**
+4. Envoyer un courrier depuis l’onglet **Envoyer**
+""")
         mp = st.text_input("Clé publique", type="password", key="s_mp")
         ms = st.text_input("Clé secrète", type="password", key="s_ms")
         if st.button("🔗 Connecter", key="s_mc", use_container_width=True):
