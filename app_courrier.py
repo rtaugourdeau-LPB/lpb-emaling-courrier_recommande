@@ -797,26 +797,42 @@ with t2:
     )
 
     st.markdown("### 🎯 Destinataire")
-    d1, d2 = st.columns(2)
-    with d1:
-        dc = st.selectbox("Civilité", ["M", "Mme", ""], key="dc")
-        dn = st.text_input("Nom *", value=pf.get("nom", ""), key="dn")
-        dp = st.text_input("Prénom", key="dp")
-        ds = st.text_input("Société", value=pf.get("soc", ""), key="ds")
-    with d2:
-        da1 = st.text_input("Adresse 1 *", value=pf.get("adr", ""), key="da1")
-        da2 = st.text_input("Adresse 2", key="da2")
-        dcp = st.text_input("CP *", key="dcp")
-        dv = st.text_input("Ville *", key="dv")
-    d3, d4 = st.columns(2)
-    with d3:
-        dpays = st.text_input("Pays", value="France", key="dpy")
-    with d4:
-        dem = st.text_input(
-            "Email" + (" *" if "Email" in mode else ""),
-            value=pf.get("email", ""),
-            key="dem"
-        )
+
+    if "Lettre" in mode:
+        d1, d2 = st.columns(2)
+        with d1:
+            dc = st.selectbox("Civilité", ["M", "Mme", ""], key="dc")
+            dn = st.text_input("Nom *", value=pf.get("nom", ""), key="dn")
+            dp = st.text_input("Prénom", key="dp")
+            ds = st.text_input("Société", value=pf.get("soc", ""), key="ds")
+        with d2:
+            da1 = st.text_input("Adresse 1 *", value=pf.get("adr", ""), key="da1")
+            da2 = st.text_input("Adresse 2", key="da2")
+            dcp = st.text_input("CP *", key="dcp")
+            dv = st.text_input("Ville *", key="dv")
+
+        d3, d4 = st.columns(2)
+        with d3:
+            dpays = st.text_input("Pays", value="France", key="dpy")
+        with d4:
+            dem = st.text_input("Email (optionnel)", value=pf.get("email", ""), key="dem")
+
+    else:
+        d1, d2 = st.columns(2)
+        with d1:
+            dc = st.selectbox("Civilité", ["M", "Mme", ""], key="dc")
+            dn = st.text_input("Nom", value=pf.get("nom", ""), key="dn")
+            dp = st.text_input("Prénom", key="dp")
+        with d2:
+            ds = st.text_input("Société", value=pf.get("soc", ""), key="ds")
+            dem = st.text_input("Email *", value=pf.get("email", ""), key="dem")
+
+        # Valeurs par défaut pour éviter les variables non définies
+        da1 = ""
+        da2 = ""
+        dcp = ""
+        dv = ""
+        dpays = "France"
 
     st.markdown("---")
 
