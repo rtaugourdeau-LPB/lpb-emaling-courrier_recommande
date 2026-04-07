@@ -116,7 +116,7 @@ SEC_HYPOTHEQUE = [
 # ═══════════════════════════════════════════════
 # PAGE CONFIG
 # ═══════════════════════════════════════════════
-st.set_page_config(page_title="📮 LPB — Courrier & Fiche PDP", page_icon="📮",
+st.set_page_config(page_title="LPB — Courrier & Fiche PDP", page_icon="📮",
                    layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
