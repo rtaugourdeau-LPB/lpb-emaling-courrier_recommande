@@ -1,6 +1,8 @@
 """
 📮 LPB — Courrier, Email & Fiche PDP (v3)
-Drag & drop ZIP Notion → Fiche PDP complète → Envoi lettre / email
+Import ZIP Notion → Recherche PDP → Fiche complète → Envoi lettre / email
+Application interne La Première Brique pour centraliser les fiches PDP,
+préparer les courriers / emails, et préremplir les informations légales LPB.
 """
 
 import streamlit as st
@@ -23,6 +25,31 @@ from collections import Counter
 # CONSTANTS
 # ═══════════════════════════════════════════════
 API_BASE = "https://www.merci-facteur.com/api/1.2/prod/service"
+
+LPB_LEGAL_INFO = {
+    "denomination": "LA PREMIERE BRIQUE",
+    "siren": "848713442",
+    "siret_siege": "84871344200053",
+    "tva_intracom": "FR45848713442",
+    "eori": "Pas de n° EORI valide",
+    "activite_principale": "Conseil pour les affaires et autres conseils de gestion",
+    "naf_ape": "70.22Z",
+    "activite_principale_naf_2025": "Activités de conseil pour les affaires et autre conseil de gestion (70.20Y)",
+    "adresse_postale": "91 COURS CHARLEMAGNE",
+    "cp": "69002",
+    "ville": "LYON",
+    "pays": "France",
+    "forme_juridique": "SAS, société par actions simplifiée",
+    "effectif": "10 à 19 salariés, en 2023",
+    "categorie_entreprise": "Petite ou Moyenne Entreprise (PME), en 2023",
+    "date_creation": "25/02/2019",
+    "date_inscription_insee": "25/02/2019",
+    "date_rne_inpi": "11/01/2022",
+    "idcc": "0478",
+    "insee_statut": "Inscrite (Insee)",
+    "inpi_statut": "Immatriculée au RNE (INPI)",
+    "sources": ["INSEE", "VIES", "Douanes", "INPI", "État des inscriptions"],
+}
 
 MODES_ENVOI = {
     "Lettre verte (normal)": "normal",
@@ -374,7 +401,51 @@ st.markdown("""<div class="hdr">
 <p>Import ZIP Notion → Recherche par email → Fiche complète (CTX, risque, BODACC) → Envoi lettre ou email avec PJ</p>
 </div>""", unsafe_allow_html=True)
 
+with st.expander("ℹ️ À propos de l’application", expanded=False):
+    st.markdown(f"""
+### Objectif
+Cette application interne **La Première Brique** permet de :
+- charger un export Notion des projets ;
+- rechercher un porteur de projet par email ;
+- afficher une fiche PDP complète ;
+- préparer et envoyer un courrier papier via **Merci Facteur** ;
+- envoyer un email via **SMTP** ;
+- conserver un historique local des envois.
 
+### Fonctionnement
+1. Importer un **ZIP / CSV Notion**
+2. Rechercher un **PDP par email**
+3. Consulter la **fiche projet / risque / contentieux / hypothèque**
+4. Préparer un **courrier** ou un **email**
+5. Envoyer puis suivre les envois
+
+### Données légales préremplies — La Première Brique
+- **Dénomination** : {LPB_LEGAL_INFO["denomination"]}
+- **SIREN** : {LPB_LEGAL_INFO["siren"]}
+- **SIRET siège social** : {LPB_LEGAL_INFO["siret_siege"]}
+- **TVA intracommunautaire** : {LPB_LEGAL_INFO["tva_intracom"]}
+- **N° EORI** : {LPB_LEGAL_INFO["eori"]}
+- **Activité principale** : {LPB_LEGAL_INFO["activite_principale"]}
+- **Code NAF / APE** : {LPB_LEGAL_INFO["naf_ape"]}
+- **Activité principale (NAF 2025)** : {LPB_LEGAL_INFO["activite_principale_naf_2025"]}
+- **Adresse** : {LPB_LEGAL_INFO["adresse_postale"]}, {LPB_LEGAL_INFO["cp"]} {LPB_LEGAL_INFO["ville"]}
+- **Forme juridique** : {LPB_LEGAL_INFO["forme_juridique"]}
+- **Effectif** : {LPB_LEGAL_INFO["effectif"]}
+- **Catégorie d'entreprise** : {LPB_LEGAL_INFO["categorie_entreprise"]}
+- **Date de création** : {LPB_LEGAL_INFO["date_creation"]}
+- **Convention collective** : IDCC {LPB_LEGAL_INFO["idcc"]}
+
+### Référentiels
+- INSEE
+- VIES
+- Douanes
+- INPI
+- État des inscriptions
+
+### État des inscriptions
+- **{LPB_LEGAL_INFO["insee_statut"]}** le {LPB_LEGAL_INFO["date_inscription_insee"]}
+- **{LPB_LEGAL_INFO["inpi_statut"]}** le {LPB_LEGAL_INFO["date_rne_inpi"]}
+""")
 # ═══════════════════════════════════════════════
 # SIDEBAR
 # ═══════════════════════════════════════════════
@@ -402,6 +473,55 @@ with st.sidebar:
         st.markdown(f'<div class="sb sb-info">📋 {len(st.session_state.df)} projets en mémoire</div>', unsafe_allow_html=True)
 
     st.markdown("---")
+    with st.expander("🏢 Fiche légale LPB", expanded=False):
+        st.markdown(f"""
+    **Dénomination**  
+    {LPB_LEGAL_INFO["denomination"]}
+    
+    **SIREN**  
+    {LPB_LEGAL_INFO["siren"]}
+    
+    **SIRET du siège social**  
+    {LPB_LEGAL_INFO["siret_siege"]}
+    
+    **N° TVA intracommunautaire**  
+    {LPB_LEGAL_INFO["tva_intracom"]}
+    
+    **N° EORI**  
+    {LPB_LEGAL_INFO["eori"]}
+    
+    **Activité principale**  
+    {LPB_LEGAL_INFO["activite_principale"]}
+    
+    **Code NAF / APE**  
+    {LPB_LEGAL_INFO["naf_ape"]}
+    
+    **Activité principale (NAF 2025)**  
+    {LPB_LEGAL_INFO["activite_principale_naf_2025"]}
+    
+    **Adresse postale**  
+    {LPB_LEGAL_INFO["adresse_postale"]}  
+    {LPB_LEGAL_INFO["cp"]} {LPB_LEGAL_INFO["ville"]}
+    
+    **Forme juridique**  
+    {LPB_LEGAL_INFO["forme_juridique"]}
+    
+    **Effectif salarié**  
+    {LPB_LEGAL_INFO["effectif"]}
+    
+    **Catégorie d'entreprise**  
+    {LPB_LEGAL_INFO["categorie_entreprise"]}
+    
+    **Date de création**  
+    {LPB_LEGAL_INFO["date_creation"]}
+    
+    **Convention collective**  
+    IDCC {LPB_LEGAL_INFO["idcc"]}
+    
+    **État des inscriptions**  
+    - {LPB_LEGAL_INFO["insee_statut"]} le {LPB_LEGAL_INFO["date_inscription_insee"]}  
+    - {LPB_LEGAL_INFO["inpi_statut"]} le {LPB_LEGAL_INFO["date_rne_inpi"]}
+    """)
     st.markdown("## ⚙️ Connexions")
     with st.expander("🏠 Merci Facteur", expanded=False):
         mp = st.text_input("Clé publique", type="password", key="s_mp")
@@ -420,11 +540,12 @@ with st.sidebar:
             st.markdown('<div class="sb sb-ok">🟢 Token actif</div>', unsafe_allow_html=True)
 
     with st.expander("📧 SMTP", expanded=False):
+        st.caption("Pour Gmail : utiliser smtp.gmail.com, port 587, TLS activé, et un mot de passe d’application Google.")
         sh = st.text_input("Serveur", value="smtp.gmail.com", key="s_sh")
         sp = st.number_input("Port", value=587, key="s_sp")
         su = st.text_input("User", key="s_su")
         sw = st.text_input("Pass", type="password", key="s_sw")
-        sf = st.text_input("From", key="s_sf")
+        sf = st.text_input("From", value=su, key="s_sf")
         stl = st.checkbox("TLS", value=True, key="s_tl")
         st.session_state.smtp = {"h": sh, "p": sp, "u": su, "w": sw, "f": sf or su, "t": stl}
         if su and sw:
@@ -629,9 +750,17 @@ with t1:
 # ───────────────────────────────────────────────
 with t2:
     pf = st.session_state.pop("pf", {})
-    mode = st.radio("**Mode**", ["📮 Lettre (Merci Facteur)", "📧 Email (SMTP)"],
-                    index=1 if pf.get("mode") == "email" else 0, horizontal=True)
+    mode = st.radio(
+        "**Mode**",
+        ["📮 Lettre (Merci Facteur)", "📧 Email (SMTP)"],
+        index=1 if pf.get("mode") == "email" else 0,
+        horizontal=True
+    )
     st.markdown("---")
+    st.info(
+        f"Les informations expéditeur courrier sont préremplies avec les données légales de "
+        f"{LPB_LEGAL_INFO['denomination']} (SIREN {LPB_LEGAL_INFO['siren']})."
+    )
 
     st.markdown("### 🎯 Destinataire")
     d1, d2 = st.columns(2)
@@ -649,8 +778,11 @@ with t2:
     with d3:
         dpays = st.text_input("Pays", value="France", key="dpy")
     with d4:
-        dem = st.text_input("Email" + (" *" if "Email" in mode else ""),
-                            value=pf.get("email", ""), key="dem")
+        dem = st.text_input(
+            "Email" + (" *" if "Email" in mode else ""),
+            value=pf.get("email", ""),
+            key="dem"
+        )
 
     st.markdown("---")
 
@@ -658,14 +790,15 @@ with t2:
         st.markdown("### 🏢 Expéditeur")
         e1, e2 = st.columns(2)
         with e1:
-            en = st.text_input("Nom exp. *", key="en")
+            en = st.text_input("Nom exp. *", value="La Première Brique", key="en")
             epr = st.text_input("Prénom exp.", key="epr")
-            eso = st.text_input("Société exp.", value="La Première Brique", key="eso")
+            eso = st.text_input("Société exp.", value=LPB_LEGAL_INFO["denomination"], key="eso")
         with e2:
-            ea = st.text_input("Adresse exp. *", key="ea")
-            ec = st.text_input("CP exp. *", key="ec")
-            evi = st.text_input("Ville exp. *", key="evi")
-            epy = st.text_input("Pays exp.", value="France", key="epy")
+            ea = st.text_input("Adresse exp. *", value=LPB_LEGAL_INFO["adresse_postale"], key="ea")
+            ec = st.text_input("CP exp. *", value=LPB_LEGAL_INFO["cp"], key="ec")
+            evi = st.text_input("Ville exp. *", value=LPB_LEGAL_INFO["ville"], key="evi")
+            epy = st.text_input("Pays exp.", value=LPB_LEGAL_INFO["pays"], key="epy")
+
         st.markdown("---")
         st.markdown("### 📝 Contenu")
         o1, o2, o3 = st.columns(3)
@@ -676,75 +809,160 @@ with t2:
         with o3:
             rv = st.checkbox("Recto-verso", key="rv")
             cl = st.checkbox("Couleur", value=True, key="cl")
+
         pdfs = st.file_uploader("📎 PDF(s) *", type=["pdf"], accept_multiple_files=True, key="pdfs")
+
         r1, r2 = st.columns(2)
         with r1:
-            dt = st.date_input("Date programmée (opt.)", value=None, min_value=datetime.now().date(), key="dt")
+            dt = st.date_input(
+                "Date programmée",
+                value=datetime.now().date(),
+                min_value=datetime.now().date(),
+                key="dt"
+            )
         with r2:
             ri = st.text_input("Réf. interne", value=pf.get("ref", ""), key="ri")
             ru = st.text_input("Réf. anti-doublon", key="ru", max_chars=200)
+
     else:
         st.markdown("### 📝 Contenu email")
-        sj = st.text_input("Objet *", value=f"Concernant : {pf.get('ref','')}" if pf.get("ref") else "", key="sj")
-        bd = st.text_area("Corps (HTML) *", height=220,
-                          placeholder="<p>Bonjour,</p>\n<p>...</p>\n<p>Cordialement,<br>LPB</p>", key="bd")
+        sj = st.text_input(
+            "Objet *",
+            value=f"Concernant : {pf.get('ref','')}" if pf.get("ref") else "",
+            key="sj"
+        )
+        bd = st.text_area(
+            "Corps (HTML) *",
+            height=220,
+            placeholder="<p>Bonjour,</p>\n<p>...</p>\n<p>Cordialement,<br>LPB</p>",
+            key="bd"
+        )
         at = st.file_uploader("📎 Pièces jointes", accept_multiple_files=True, key="at")
 
     st.markdown("---")
     cs, cr = st.columns([4, 1])
+
     with cs:
         if st.button("🚀 ENVOYER", type="primary", use_container_width=True, key="go"):
             if "Lettre" in mode:
                 errs = []
-                if not dn and not ds: errs.append("Nom/société dest.")
-                if not dcp: errs.append("CP")
-                if not dv: errs.append("Ville")
-                if not pdfs: errs.append("PDF(s)")
-                if not st.session_state.mf_token: errs.append("Non connecté MF")
-                if not st.session_state.mf_uid: errs.append("User ID MF")
+                if not dn and not ds:
+                    errs.append("Nom/société dest.")
+                if not dcp:
+                    errs.append("CP")
+                if not dv:
+                    errs.append("Ville")
+                if not pdfs:
+                    errs.append("PDF(s)")
+                if not st.session_state.mf_token:
+                    errs.append("Non connecté MF")
+                if not st.session_state.mf_uid:
+                    errs.append("User ID MF")
+
                 if errs:
                     st.error("❌ Manquant : " + ", ".join(errs))
                 else:
                     with st.spinner("📮 Envoi..."):
-                        fb = [{"fileName": f.name, "fileBase64": base64.b64encode(f.read()).decode()} for f in pdfs]
+                        fb = [
+                            {"fileName": f.name, "fileBase64": base64.b64encode(f.read()).decode()}
+                            for f in pdfs
+                        ]
                         res = mf_send(
                             st.session_state.mf_uid,
-                            [{"civilite": dc, "nom": dn, "prenom": dp, "societe": ds,
-                              "adresse1": da1, "adresse2": da2, "adresse3": "",
-                              "cp": dcp, "ville": dv, "pays": dpays, "email": dem}],
-                            {"nom": en, "prenom": epr, "societe": eso,
-                             "adresse1": ea, "adresse2": "", "adresse3": "",
-                             "cp": ec, "ville": evi, "pays": epy},
-                            fb, MODES_ENVOI[me], TYPES_COURRIER[tc], rv, cl,
-                            str(dt) if dt else None, ri or None, ru or None,
+                            [{
+                                "civilite": dc,
+                                "nom": dn,
+                                "prenom": dp,
+                                "societe": ds,
+                                "adresse1": da1,
+                                "adresse2": da2,
+                                "adresse3": "",
+                                "cp": dcp,
+                                "ville": dv,
+                                "pays": dpays,
+                                "email": dem
+                            }],
+                            {
+                                "nom": en,
+                                "prenom": epr,
+                                "societe": eso,
+                                "adresse1": ea,
+                                "adresse2": "",
+                                "adresse3": "",
+                                "cp": ec,
+                                "ville": evi,
+                                "pays": epy
+                            },
+                            fb,
+                            MODES_ENVOI[me],
+                            TYPES_COURRIER[tc],
+                            rv,
+                            cl,
+                            str(dt) if dt else None,
+                            ri or None,
+                            ru or None,
                         )
+
                         if "error" not in res and res.get("result"):
-                            st.markdown('<div class="sb sb-ok">✅ <b>Courrier envoyé !</b></div>', unsafe_allow_html=True)
+                            st.markdown(
+                                '<div class="sb sb-ok">✅ <b>Courrier envoyé !</b></div>',
+                                unsafe_allow_html=True
+                            )
                             st.json(res["result"])
-                            st.session_state.history.append({"type": "📮", "dest": f"{dn} {dp}".strip(),
-                                "mode": me, "ref": ri, "date": datetime.now().strftime("%Y-%m-%d %H:%M")})
+                            st.session_state.history.append({
+                                "type": "📮",
+                                "dest": f"{dn} {dp}".strip(),
+                                "mode": me,
+                                "ref": ri,
+                                "date": datetime.now().strftime("%Y-%m-%d %H:%M")
+                            })
                         else:
-                            st.markdown(f'<div class="sb sb-err">❌ {json.dumps(res, ensure_ascii=False)}</div>', unsafe_allow_html=True)
+                            st.markdown(
+                                f'<div class="sb sb-err">❌ {json.dumps(res, ensure_ascii=False)}</div>',
+                                unsafe_allow_html=True
+                            )
+
             else:
                 errs = []
-                if not dem: errs.append("Email dest.")
-                if not sj: errs.append("Objet")
-                if not bd: errs.append("Corps")
+                if not dem:
+                    errs.append("Email dest.")
+                if not sj:
+                    errs.append("Objet")
+                if not bd:
+                    errs.append("Corps")
+
                 sm = st.session_state.smtp
-                if not sm.get("u") or not sm.get("w"): errs.append("SMTP")
+                if not sm.get("u") or not sm.get("w"):
+                    errs.append("SMTP")
+
                 if errs:
                     st.error("❌ Manquant : " + ", ".join(errs))
                 else:
                     with st.spinner("📧 Envoi..."):
                         al = [(f.name, f.read()) for f in at] if at else None
-                        res = smtp_send(sm["h"], sm["p"], sm["u"], sm["w"], sm["f"],
-                                        dem, sj, bd, al, sm.get("t", True))
+                        res = smtp_send(
+                            sm["h"], sm["p"], sm["u"], sm["w"], sm["f"],
+                            dem, sj, bd, al, sm.get("t", True)
+                        )
+
                         if res["ok"]:
-                            st.markdown('<div class="sb sb-ok">✅ <b>Email envoyé !</b></div>', unsafe_allow_html=True)
-                            st.session_state.history.append({"type": "📧", "dest": dem, "sujet": sj,
-                                "pj": len(al) if al else 0, "date": datetime.now().strftime("%Y-%m-%d %H:%M")})
+                            st.markdown(
+                                '<div class="sb sb-ok">✅ <b>Email envoyé !</b></div>',
+                                unsafe_allow_html=True
+                            )
+                            st.session_state.history.append({
+                                "type": "📧",
+                                "dest": dem,
+                                "sujet": sj,
+                                "pj": len(al) if al else 0,
+                                "date": datetime.now().strftime("%Y-%m-%d %H:%M")
+                            })
                         else:
-                            st.markdown(f'<div class="sb sb-err">❌ {res["msg"]}</div>', unsafe_allow_html=True)
+                            st.markdown(
+                                f'<div class="sb sb-err">❌ {res["msg"]}</div>',
+                                unsafe_allow_html=True
+                            )
+
     with cr:
         if st.button("🗑️", use_container_width=True, key="rst"):
             st.rerun()
@@ -795,4 +1013,10 @@ with t4:
             st.rerun()
 
 st.markdown("---")
-st.markdown('<div style="text-align:center;opacity:.35;font-size:.75rem">📮 LPB v3 — Merci Facteur API + SMTP — Données locales</div>', unsafe_allow_html=True)
+st.markdown(
+    f'<div style="text-align:center;opacity:.35;font-size:.75rem">'
+    f'📮 LPB v3 — {LPB_LEGAL_INFO["denomination"]} — SIREN {LPB_LEGAL_INFO["siren"]} — '
+    f'Merci Facteur API + SMTP — Données locales'
+    f'</div>',
+    unsafe_allow_html=True
+)
