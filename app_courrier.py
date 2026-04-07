@@ -472,59 +472,57 @@ with st.sidebar:
     elif st.session_state.df is not None:
         st.markdown(f'<div class="sb sb-info">📋 {len(st.session_state.df)} projets en mémoire</div>', unsafe_allow_html=True)
 
-    st.markdown("---")
     with st.expander("🏢 Fiche légale LPB", expanded=False):
-        st.markdown(f"""
-    **Dénomination**  
-    {LPB_LEGAL_INFO["denomination"]}
-    
-    **SIREN**  
-    {LPB_LEGAL_INFO["siren"]}
-    
-    **SIRET du siège social**  
-    {LPB_LEGAL_INFO["siret_siege"]}
-    
-    **N° TVA intracommunautaire**  
-    {LPB_LEGAL_INFO["tva_intracom"]}
-    
-    **N° EORI**  
-    {LPB_LEGAL_INFO["eori"]}
-    
-    **Activité principale**  
-    {LPB_LEGAL_INFO["activite_principale"]}
-    
-    **Code NAF / APE**  
-    {LPB_LEGAL_INFO["naf_ape"]}
-    
-    **Activité principale (NAF 2025)**  
-    {LPB_LEGAL_INFO["activite_principale_naf_2025"]}
-    
-    **Adresse postale**  
-    {LPB_LEGAL_INFO["adresse_postale"]}  
-    {LPB_LEGAL_INFO["cp"]} {LPB_LEGAL_INFO["ville"]}
-    
-    **Forme juridique**  
-    {LPB_LEGAL_INFO["forme_juridique"]}
-    
-    **Effectif salarié**  
-    {LPB_LEGAL_INFO["effectif"]}
-    
-    **Catégorie d'entreprise**  
-    {LPB_LEGAL_INFO["categorie_entreprise"]}
-    
-    **Date de création**  
-    {LPB_LEGAL_INFO["date_creation"]}
-    
-    **Convention collective**  
-    IDCC {LPB_LEGAL_INFO["idcc"]}
-    
-    **État des inscriptions**  
-    - {LPB_LEGAL_INFO["insee_statut"]} le {LPB_LEGAL_INFO["date_inscription_insee"]}  
-    - {LPB_LEGAL_INFO["inpi_statut"]} le {LPB_LEGAL_INFO["date_rne_inpi"]}
-    """)
+        st.markdown(f"""**Dénomination**  
+{LPB_LEGAL_INFO["denomination"]}
+
+**SIREN**  
+{LPB_LEGAL_INFO["siren"]}
+
+**SIRET du siège social**  
+{LPB_LEGAL_INFO["siret_siege"]}
+
+**N° TVA intracommunautaire**  
+{LPB_LEGAL_INFO["tva_intracom"]}
+
+**N° EORI**  
+{LPB_LEGAL_INFO["eori"]}
+
+**Activité principale**  
+{LPB_LEGAL_INFO["activite_principale"]}
+
+**Code NAF / APE**  
+{LPB_LEGAL_INFO["naf_ape"]}
+
+**Activité principale (NAF 2025)**  
+{LPB_LEGAL_INFO["activite_principale_naf_2025"]}
+
+**Adresse postale**  
+{LPB_LEGAL_INFO["adresse_postale"]}  
+{LPB_LEGAL_INFO["cp"]} {LPB_LEGAL_INFO["ville"]}
+
+**Forme juridique**  
+{LPB_LEGAL_INFO["forme_juridique"]}
+
+**Effectif salarié**  
+{LPB_LEGAL_INFO["effectif"]}
+
+**Catégorie d'entreprise**  
+{LPB_LEGAL_INFO["categorie_entreprise"]}
+
+**Date de création**  
+{LPB_LEGAL_INFO["date_creation"]}
+
+**Convention collective**  
+IDCC {LPB_LEGAL_INFO["idcc"]}
+
+**État des inscriptions**  
+- {LPB_LEGAL_INFO["insee_statut"]} le {LPB_LEGAL_INFO["date_inscription_insee"]}  
+- {LPB_LEGAL_INFO["inpi_statut"]} le {LPB_LEGAL_INFO["date_rne_inpi"]}
+""")
     st.markdown("## ⚙️ Connexions")
     with st.expander("🏠 Merci Facteur", expanded=False):
-                st.markdown("""
+        st.markdown("""
 ### Guide Merci Facteur API
 Pour connecter l’app à Merci Facteur, il te faut :
 - une **clé publique**
@@ -560,7 +558,7 @@ Pour connecter l’app à Merci Facteur, il te faut :
             st.markdown('<div class="sb sb-ok">🟢 Token actif</div>', unsafe_allow_html=True)
 
     with st.expander("📧 SMTP", expanded=False):
-                st.markdown("""
+        st.markdown("""
 ### Guide SMTP Gmail
 1. Active la validation en 2 étapes sur ton compte Google.
 2. Génère ensuite un mot de passe d’application.
