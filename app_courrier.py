@@ -540,6 +540,22 @@ with st.sidebar:
             st.markdown('<div class="sb sb-ok">🟢 Token actif</div>', unsafe_allow_html=True)
 
     with st.expander("📧 SMTP", expanded=False):
+                st.markdown("""
+### Guide SMTP Gmail
+1. Active la validation en 2 étapes sur ton compte Google.
+2. Génère ensuite un mot de passe d’application.
+3. Utilise ensuite :
+   - **Serveur** : `smtp.gmail.com`
+   - **Port** : `587`
+   - **TLS** : activé
+   - **User** : ton adresse Gmail complète
+   - **Pass** : le mot de passe d’application généré
+   - **From** : en général la même adresse email
+
+**Liens utiles**
+- Mot de passe d’application Google : https://myaccount.google.com/apppasswords
+- Aide officielle Google : https://support.google.com/accounts/answer/185833
+""")
         st.caption("Pour Gmail : utiliser smtp.gmail.com, port 587, TLS activé, et un mot de passe d’application Google.")
         sh = st.text_input("Serveur", value="smtp.gmail.com", key="s_sh")
         sp = st.number_input("Port", value=587, key="s_sp")
