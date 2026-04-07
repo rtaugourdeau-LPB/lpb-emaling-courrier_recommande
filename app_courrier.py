@@ -790,7 +790,7 @@ with t2:
         st.markdown("### 🏢 Expéditeur")
         e1, e2 = st.columns(2)
         with e1:
-            en = st.text_input("Nom exp. *", value="La Première Brique", key="en")
+            en = st.text_input("Nom exp. *", value="", key="en")
             epr = st.text_input("Prénom exp.", key="epr")
             eso = st.text_input("Société exp.", value=LPB_LEGAL_INFO["denomination"], key="eso")
         with e2:
